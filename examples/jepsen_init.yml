@@ -47,17 +47,17 @@
 
     - name: Generate SSH key
       sudo: False
-      shell: "ssh-keygen -t rsa -P '' -f {{ jepsen_user_home }}/.ssh/id_rsa"
+      shell: "ssh-keygen -t dsa -P '' -f {{ jepsen_user_home }}/.ssh/id_dsa"
 
     - name: Verify SSH keys
       sudo: False
-      file: "path={{ jepsen_user_home }}/.ssh/id_rsa state=file"
+      file: "path={{ jepsen_user_home }}/.ssh/id_dsa state=file"
 
     - local_action: file name=data state=directory
       sudo: False
 
     - name: Store SSH public key
-      fetch: "src={{ jepsen_user_home }}/.ssh/id_rsa.pub dest=data/id_rsa.pub flat=yes"
+      fetch: "src={{ jepsen_user_home }}/.ssh/id_dsa.pub dest=data/id_dsa.pub flat=yes"
 
     - name: Clone Jepsen repository
       sudo: False
@@ -83,7 +83,7 @@
   tasks:
 
     - name: Install SSH key
-      authorized_key: user=vagrant key="{{ lookup('file', 'data/id_rsa.pub') }}"
+      authorized_key: user=vagrant key="{{ lookup('file', 'data/id_dsa.pub') }}"
 
 - hosts: console_node
   roles:
@@ -97,7 +97,7 @@
     - local_action: file name=data/ssh-host-keys state=directory
       sudo: False
 
-    # NB: No ECDSA keys to work out of the box on Mac OS X :(
+    # NB: No ECDSA keys to work out of the box with Mac OS X :(
     - name: Generate SSH host keys
       sudo: False
       local_action: command ssh-keygen -t {{ item }} -N "" -f data/ssh-host-keys/ssh_host_{{ item }}_key
@@ -118,7 +118,7 @@
       with_items: [ 'dsa', 'rsa' ]
       notify: Restart sshd
 
-- hosts: test_node
+- hosts: console_node
   sudo: False
   roles:
     - brianshumate.jepsen

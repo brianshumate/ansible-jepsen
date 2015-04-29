@@ -8,6 +8,7 @@ jepsen_user_home: /home/{{ jepsen_user }}
 jepsen_test_node_os_packages:
   - git
   - java-package
+  - libjna-java
 
 jepsen_java_binary: jdk-8u45-linux-x64.tar.gz
 

@@ -1,4 +1,29 @@
-# Jepsen
+```
+            _
+           | |
+           | |
+           | |
+  _________|_|
+ |           |
+ |   (|||)   |
+ | _________ |
+ ||         ||
+ ||         ||
+ ||_________||
+ |           |
+ |[1] [2] [3]|       _
+ |           |      | | ___ _ __  ___  ___ _ __
+ |[4] [5] [6]|   _  | |/ _ \ '_ \/ __|/ _ \ '_ \
+ |           |  | |_| |  __/ |_) \__ \  __/ | | |
+ |[7] [8] [9]|   \___/ \___| .__/|___/\___|_| |_|
+ |           |             |_|
+ |    [0]    |
+ |           |
+ |   (|||)   |
+ |___________|CA15
+
+
+```
 
 This role prepares a cluster for testing various databases with
 [Jepsen](https://github.com/aphyr/jepsen).
@@ -56,6 +81,26 @@ ansible-playbook -i $HOSTS jepsen_init.yml
 ```
 
 where `$HOSTS` represents the filename of your hosts inventory file.
+
+## Quick Start
+
+1. Place your Java binary in the `files` directory as described in
+   **Requirements**, don't forget to update the `jepsen_java_binary`
+	 and `jepsen_java_package` variables in `defaults/main.yml` as well.
+2. `cd examples`
+3. `vagrant up`
+4. Time passes...
+5. More time passes...
+6. `vagrant ssh n0`
+7. `cd jepsen/$DATABASE`
+8. `~/bin/lein test`
+
+Pick your poison; substitute `$DATABASE` for one to run Jepsen against
+as listed in `~/jepsen/`:
+
+* aerospike
+* elasticsearch
+* mongodb
 
 ## License
 
