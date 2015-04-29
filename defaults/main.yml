@@ -1,0 +1,27 @@
+---
+# defaults file for brianshumate.ansible-jepsen
+
+jepsen_user: vagrant
+
+jepsen_user_home: /home/{{ jepsen_user }}
+
+jepsen_test_node_os_packages:
+  - git
+  - java-package
+
+jepsen_test_node_users:
+  - vagrant@n1
+  - vagrant@n2
+  - vagrant@n3
+  - vagrant@n4
+  - vagrant@n5
+
+jepsen_java_binary: jdk-8u45-linux-x64.tar.gz
+
+jepsen_java_package: oracle-j2sdk1.8_1.8.0+update45_amd64.deb
+
+jepsen_makejpkg_script: /usr/share/java-package/oracle-j2sdk.sh
+
+jepsen_lein_script_url: https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+
+jepsen_lein_script_shasum: af77a8569238fb89272fdd46974c97383be126f19e709f1e7b1c5ffb9135e1d7
