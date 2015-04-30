@@ -22,3 +22,7 @@
 - Add a .ssh/config on each node
 - Update documentation
 - Add SUCCESS.jpg ;)
+
+## v1.1.1
+
+- Update documentation re: still a work in progress

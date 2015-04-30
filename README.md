@@ -25,6 +25,11 @@
 
 ```
 
+> NOTE: This is a work in progress and is not yet fully functional
+>       The author's JVM/Clojure fu is sorely lacking and so there is
+>       an inexplicable Auth fail error still preventing this from working
+>       See: #1
+
 This role prepares a cluster for testing various databases with
 [Jepsen](https://github.com/aphyr/jepsen).
 
