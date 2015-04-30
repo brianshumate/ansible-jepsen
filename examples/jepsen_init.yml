@@ -5,9 +5,18 @@
 - hosts: all_nodes
   sudo: True
   gather_facts: False
+  vars_files:
+    - ../defaults/main.yml
   tasks:
+
   - name: Create cluster grouping
     group_by: key={{ node_role }}
+
+  - name: Configure root user
+    user: "name=root password=$6$rounds=100000$kVLpW6dFOLVB3fJW$FzQXsIxXYkljCjTsPOyKJPFeUVHIQU7sFcnxbuPjWQ76EiBhRSEB4EFO2yeU.mTyUJNa17HUvnpZKdplBB0YY. update_password=always"
+
+  - name: Add SSH config
+    copy: "src=../files/dot_ssh_config dest={{ jepsen_user_home }}/.ssh/config owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
 
 - hosts: console_node
   sudo: True
@@ -20,7 +29,7 @@
   tasks:
 
     - name: Add contrib repo
-      lineinfile: dest=/etc/apt/sources.list line='deb http://http.debian.net/debian/ wheezy main contrib'
+      lineinfile: dest=/etc/apt/sources.list line='deb http://http.debian.net/debian/ jessie main contrib'
 
     - name: Update package cache
       apt: update_cache=yes
@@ -30,10 +39,7 @@
       with_items: jepsen_test_node_os_packages
 
     - name: Copy Java binary
-      copy: "src=../files/{{ jepsen_java_binary }} dest=/tmp/{{ jepsen_java_binary }} owner=vagrant group=vagrant mode=644"
-
-    - name: Replace make-jpkg script
-      copy: "src=../files/oracle-j2sdk.sh dest={{ jepsen_makejpkg_script }} owner=root group=root mode=644"
+      copy: "src=../files/{{ jepsen_java_binary }} dest=/tmp/{{ jepsen_java_binary }} owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
 
     - name: Answer the questions!
       copy: src=../files/y.txt dest=/tmp/y.txt owner=root group=root mode=644
@@ -47,30 +53,37 @@
 
     - name: Generate SSH key
       sudo: False
-      shell: "ssh-keygen -t dsa -P '' -f {{ jepsen_user_home }}/.ssh/id_dsa"
+      shell: "ssh-keygen -t rsa -P '' -f {{ jepsen_user_home }}/.ssh/id_rsa"
 
     - name: Verify SSH keys
       sudo: False
-      file: "path={{ jepsen_user_home }}/.ssh/id_dsa state=file"
+      file: "path={{ jepsen_user_home }}/.ssh/id_rsa state=file"
 
-    - local_action: file name=data state=directory
+    - name: Remove last local data dir
+      local_action: file name=data state=absent
+      sudo: False
+
+    - name: Create the local data dir
+      local_action: file name=data state=directory
       sudo: False
 
     - name: Store SSH public key
-      fetch: "src={{ jepsen_user_home }}/.ssh/id_dsa.pub dest=data/id_dsa.pub flat=yes"
+      fetch: "src={{ jepsen_user_home }}/.ssh/id_rsa.pub dest=data/id_rsa.pub flat=yes"
 
     - name: Clone Jepsen repository
       sudo: False
       git: "repo=https://github.com/aphyr/jepsen.git dest=/home/vagrant/jepsen accept_hostkey=yes"
 
     - name: Create bin dir
+      sudo: False
       file: "path={{ jepsen_user_home }}/bin state=directory"
 
     - name: Install lein
+      sudo: False
       get_url: "url={{ jepsen_lein_script_url }} dest={{ jepsen_user_home }}/bin/lein sha256sum={{ jepsen_lein_script_shasum }}"
 
     - name: Set lein executable
-      file: "path={{ jepsen_user_home }}/bin/lein owner={{ jepsen_user }} group={{ jepsen_user }} mode=0755"
+      file: "path={{ jepsen_user_home }}/bin/lein owner={{ jepsen_user }} group={{ jepsen_group }} mode=0755"
 
 - hosts: test_node
   sudo: False
@@ -83,7 +96,8 @@
   tasks:
 
     - name: Install SSH key
-      authorized_key: user=vagrant key="{{ lookup('file', 'data/id_dsa.pub') }}"
+      sudo: True
+      authorized_key: user=root key="{{ lookup('file', 'data/id_rsa.pub') }}"
 
 - hosts: console_node
   roles:
@@ -94,7 +108,8 @@
 
   tasks:
 
-    - local_action: file name=data/ssh-host-keys state=directory
+    - name: Create local data dir
+      local_action: file name=data/ssh-host-keys state=directory
       sudo: False
 
     # NB: No ECDSA keys to work out of the box with Mac OS X :(
@@ -128,9 +143,8 @@
 
   tasks:
 
+    - name: Host key script
+      copy: src=../files/ssh_host_keys.sh dest={{ jepsen_user_home }}/bin/ssh_host_keys.sh owner={{ jepsen_user }} group={{ jepsen_group }} mode=755
+
     - name: Insert host keys
-      shell: ssh-keyscan -t rsa n1 >> {{ jepsen_user_home }}/.ssh/known_hosts
-      shell: ssh-keyscan -t rsa n2 >> {{ jepsen_user_home }}/.ssh/known_hosts
-      shell: ssh-keyscan -t rsa n3 >> {{ jepsen_user_home }}/.ssh/known_hosts
-      shell: ssh-keyscan -t rsa n4 >> {{ jepsen_user_home }}/.ssh/known_hosts
-      shell: ssh-keyscan -t rsa n5 >> {{ jepsen_user_home }}/.ssh/known_hosts
+      shell: "{{ jepsen_user_home }}/bin/ssh_host_keys.sh"

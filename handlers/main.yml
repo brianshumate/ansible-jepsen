@@ -2,4 +2,5 @@
 # handlers file for brianshumate.ansible-jepsen
 
 - name: Restart sshd
-  service: name=ssh state=restarted
+  sudo: True
+  shell: /etc/init.d/ssh restart

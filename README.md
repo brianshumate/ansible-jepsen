@@ -58,6 +58,7 @@ The default variables for this project in `defaults/main.yml` are as follows:
 | Name                                 | Default  | Description                                    |
 | ------------------------------------ | -------- | ---------------------------------------------- |
 | jepsen_user          | vagrant    | OS username |
+| jepsen_group         | vagrant    | OS groupname |
 | jepsen_user_home     | /home/vagrant | OS user home directory |
 | jepsen_test_node_os_packages | list | OS packages to install for the test nodes |
 | jepsen_java_binary | jdk-8u45-linux-x64.tar.gz | Filename for the Oracle Java binary tarball |
@@ -93,7 +94,7 @@ where `$HOSTS` represents the filename of your hosts inventory file.
 5. More time passes...
 6. `vagrant ssh n0`
 7. `cd jepsen/$DATABASE`
-8. `~/bin/lein test`
+8. `lein test`
 
 Pick your poison; substitute `$DATABASE` for one to run Jepsen against
 as listed in `~/jepsen/`:
@@ -111,8 +112,7 @@ BSD
 Thanks to the following people:
 
 - [Kyle Kingsbury](https://aphyr.com/) ([@aphyr](https://github.com/aphyr)) for creating Jepsen and for
-  all of the hard work he does in validating database software claims
-	with it.
+  all of the hard work he does in validating database software with it.
 
 - [Brent Woodruff](http://www.brentwoodruff.com/) for his help with various
   tips while I was making this role.

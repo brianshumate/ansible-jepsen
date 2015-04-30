@@ -13,3 +13,12 @@
 - Add libjna-java package
 - Add host keys to known_hosts file on console node
 - Updated documentation
+
+## v1.1.0
+
+- Switch to Debian 8
+- Set root user up according to jepsen/lxc.md
+- Add ssh pubkey for root user
+- Add a .ssh/config on each node
+- Update documentation
+- Add SUCCESS.jpg ;)
