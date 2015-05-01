@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure 5 Jepsen test nodes and a controller node
   config.vm.define :n0 do |n0_config|
     n0_config.vm.box = BOX_NAME
-    n0_config.vm.network :private_network, ip: "10.1.42.42"
+    n0_config.vm.network :private_network, ip: "192.168.122.10"
     n0_config.vm.hostname = "n0.local"
     n0_config.ssh.forward_agent = true
     n0_config.vm.provider "virtualbox" do |v|
@@ -26,17 +26,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     n0_config.vm.provision :hosts do |provisioner|
-        provisioner.add_host '10.1.42.42', ['n0.local']
-        provisioner.add_host '10.1.42.10', ['n0.local']
-        provisioner.add_host '10.1.42.20', ['n2.local']
-        provisioner.add_host '10.1.42.30', ['n3.local']
-        provisioner.add_host '10.1.42.40', ['n4.local']
-        provisioner.add_host '10.1.42.50', ['n5.local']
+        provisioner.add_host '192.168.122.10', ['n0.local']
+        provisioner.add_host '192.168.122.11', ['n1.local']
+        provisioner.add_host '192.168.122.13', ['n2.local']
+        provisioner.add_host '192.168.122.14', ['n3.local']
+        provisioner.add_host '192.168.122.15', ['n4.local']
+        provisioner.add_host '192.168.122.16', ['n5.local']
     end
   end
   config.vm.define :n1 do |n1_config|
     n1_config.vm.box = BOX_NAME
-    n1_config.vm.network :private_network, ip: "10.1.42.10"
+    n1_config.vm.network :private_network, ip: "192.168.122.11"
     n1_config.vm.hostname = "n1.local"
     n1_config.ssh.forward_agent = true
     n1_config.vm.provider "virtualbox" do |v|
@@ -48,17 +48,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     n1_config.vm.provision :hosts do |provisioner|
-        provisioner.add_host '10.1.42.42', ['n0.local']
-        provisioner.add_host '10.1.42.10', ['n1.local']
-        provisioner.add_host '10.1.42.20', ['n2.local']
-        provisioner.add_host '10.1.42.30', ['n3.local']
-        provisioner.add_host '10.1.42.40', ['n4.local']
-        provisioner.add_host '10.1.42.50', ['n5.local']
+      provisioner.add_host '192.168.122.10', ['n0.local']
+      provisioner.add_host '192.168.122.11', ['n1.local']
+      provisioner.add_host '192.168.122.13', ['n2.local']
+      provisioner.add_host '192.168.122.14', ['n3.local']
+      provisioner.add_host '192.168.122.15', ['n4.local']
+      provisioner.add_host '192.168.122.16', ['n5.local']
     end
   end
   config.vm.define :n2 do |n2_config|
     n2_config.vm.box = BOX_NAME
-    n2_config.vm.network :private_network, ip: "10.1.42.20"
+    n2_config.vm.network :private_network, ip: "192.168.122.12"
     n2_config.vm.hostname = "n2.local"
     n2_config.ssh.forward_agent = true
     n2_config.vm.provider "virtualbox" do |v|
@@ -70,17 +70,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     n2_config.vm.provision :hosts do |provisioner|
-        provisioner.add_host '10.1.42.42', ['n0.local']
-        provisioner.add_host '10.1.42.10', ['n1.local']
-        provisioner.add_host '10.1.42.20', ['n2.local']
-        provisioner.add_host '10.1.42.30', ['n3.local']
-        provisioner.add_host '10.1.42.40', ['n4.local']
-        provisioner.add_host '10.1.42.50', ['n5.local']
+      provisioner.add_host '192.168.122.10', ['n0.local']
+      provisioner.add_host '192.168.122.11', ['n1.local']
+      provisioner.add_host '192.168.122.13', ['n2.local']
+      provisioner.add_host '192.168.122.14', ['n3.local']
+      provisioner.add_host '192.168.122.15', ['n4.local']
+      provisioner.add_host '192.168.122.16', ['n5.local']
     end
   end
   config.vm.define :n3 do |n3_config|
     n3_config.vm.box = BOX_NAME
-    n3_config.vm.network :private_network, ip: "10.1.42.30"
+    n3_config.vm.network :private_network, ip: "192.168.122.13"
     n3_config.vm.hostname = "n3.local"
     n3_config.ssh.forward_agent = true
     n3_config.vm.provider "virtualbox" do |v|
@@ -92,17 +92,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     n3_config.vm.provision :hosts do |provisioner|
-        provisioner.add_host '10.1.42.42', ['n0.local']
-        provisioner.add_host '10.1.42.10', ['n1.local']
-        provisioner.add_host '10.1.42.20', ['n2.local']
-        provisioner.add_host '10.1.42.30', ['n3.local']
-        provisioner.add_host '10.1.42.40', ['n4.local']
-        provisioner.add_host '10.1.42.50', ['n5.local']
+      provisioner.add_host '192.168.122.10', ['n0.local']
+      provisioner.add_host '192.168.122.11', ['n1.local']
+      provisioner.add_host '192.168.122.13', ['n2.local']
+      provisioner.add_host '192.168.122.14', ['n3.local']
+      provisioner.add_host '192.168.122.15', ['n4.local']
+      provisioner.add_host '192.168.122.16', ['n5.local']
     end
   end
   config.vm.define :n4 do |n4_config|
     n4_config.vm.box = BOX_NAME
-    n4_config.vm.network :private_network, ip: "10.1.42.40"
+    n4_config.vm.network :private_network, ip: "192.168.122.14"
     n4_config.vm.hostname = "n4.local"
     n4_config.ssh.forward_agent = true
     n4_config.vm.provider "virtualbox" do |v|
@@ -114,17 +114,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     n4_config.vm.provision :hosts do |provisioner|
-        provisioner.add_host '10.1.42.42', ['n0.local']
-        provisioner.add_host '10.1.42.10', ['n1.local']
-        provisioner.add_host '10.1.42.20', ['n2.local']
-        provisioner.add_host '10.1.42.30', ['n3.local']
-        provisioner.add_host '10.1.42.40', ['n4.local']
-        provisioner.add_host '10.1.42.50', ['n5.local']
+      provisioner.add_host '192.168.122.10', ['n0.local']
+      provisioner.add_host '192.168.122.11', ['n1.local']
+      provisioner.add_host '192.168.122.13', ['n2.local']
+      provisioner.add_host '192.168.122.14', ['n3.local']
+      provisioner.add_host '192.168.122.15', ['n4.local']
+      provisioner.add_host '192.168.122.16', ['n5.local']
     end
   end
   config.vm.define :n5 do |n5_config|
     n5_config.vm.box = BOX_NAME
-    n5_config.vm.network :private_network, ip: "10.1.42.50"
+    n5_config.vm.network :private_network, ip: "192.168.122.15"
     n5_config.vm.hostname = "n5.local"
     n5_config.ssh.forward_agent = true
     n5_config.vm.provider "virtualbox" do |v|
@@ -136,12 +136,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
     n5_config.vm.provision :hosts do |provisioner|
-        provisioner.add_host '10.1.42.42', ['n0.local']
-        provisioner.add_host '10.1.42.10', ['n1.local']
-        provisioner.add_host '10.1.42.20', ['n2.local']
-        provisioner.add_host '10.1.42.30', ['n3.local']
-        provisioner.add_host '10.1.42.40', ['n4.local']
-        provisioner.add_host '10.1.42.50', ['n5.local']
+      provisioner.add_host '192.168.122.10', ['n0.local']
+      provisioner.add_host '192.168.122.11', ['n1.local']
+      provisioner.add_host '192.168.122.13', ['n2.local']
+      provisioner.add_host '192.168.122.14', ['n3.local']
+      provisioner.add_host '192.168.122.15', ['n4.local']
+      provisioner.add_host '192.168.122.16', ['n5.local']
     end
     # Bit of a hack since VirtualBox does not support parallel provisioning
     n5_config.vm.provision :ansible do |ansible|

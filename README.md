@@ -25,11 +25,6 @@
 
 ```
 
-> NOTE: This is a work in progress and is not yet fully functional
->       The author's JVM/Clojure fu is sorely lacking and so there is
->       an inexplicable Auth fail error still preventing this from working
->       See: #1
-
 This role prepares a cluster for testing various databases with
 [Jepsen](https://github.com/aphyr/jepsen).
 
@@ -46,14 +41,14 @@ packge file into the `files/` subdirectory of this role.
 For example in `defaults/main.yml`:
 
 ```
-jepsen_java_binary: jdk-8u45-linux-x64.tar.gz
+jepsen_java_binary: jdk-7u79-linux-x64.tar.gz
 ```
 
 and the contents of `files/`:
 
 ```
 ls -1 files
-jdk-8u45-linux-x64.tar.gz
+jdk-7u79-linux-x64.tar.gz
 ```
 
 ## Role Variables
@@ -88,18 +83,27 @@ ansible-playbook -i $HOSTS jepsen_init.yml
 
 where `$HOSTS` represents the filename of your hosts inventory file.
 
-## Quick Start
+## Quick Start with Vagrant
+
+Add the hosts to `/etc/hosts`:
+
+```
+192.168.122.10 n0.local n0
+192.168.122.10 n1.local n1
+192.168.122.10 n2.local n2
+192.168.122.10 n3.local n3
+192.168.122.10 n4.local n4
+192.168.122.10 n5.local n5
+```
 
 1. Place your Java binary in the `files` directory as described in
    **Requirements**, don't forget to update the `jepsen_java_binary`
 	 and `jepsen_java_package` variables in `defaults/main.yml` as well.
 2. `cd examples`
 3. `vagrant up`
-4. Time passes...
-5. More time passes...
-6. `vagrant ssh n0`
-7. `cd jepsen/$DATABASE`
-8. `lein test`
+4. `vagrant ssh n0`
+5. `cd jepsen/$DATABASE`
+6. `lein test`
 
 Pick your poison; substitute `$DATABASE` for one to run Jepsen against
 as listed in `~/jepsen/`:

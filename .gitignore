@@ -1,5 +1,5 @@
 .DS_Store
 .tm_properties
 .vagrant
-jdk-8u45-linux-x64.tar.gz
+jdk-7u79-linux-x64.tar.gz
 examples/data/*

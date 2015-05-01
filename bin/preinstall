@@ -5,6 +5,7 @@
 
 CHMODBIN="/bin/chmod"
 GREPBIN="/usr/bin/grep"
+STARTIP="192.168.122.10"
 SUDOBIN="/usr/bin/sudo"
 SHBIN="/bin/sh"
 VAGRANTBIN="/usr/bin/vagrant"
@@ -31,18 +32,19 @@ function sudocheck {
 
 # Add hosts entries if necessary
 function add_hosts {
-  #FIXME: this doesn't work in bash or something
-  if $GREPBIN -w "Jepsen test cluster" /etc/hosts; then
+  #FIXME: this doesn't work as expected
+  if grep -Fq "192.168.122.12" /etc/hosts
+  then
     logmsg notice "Jepsen test cluster VM node information present in /etc/hosts"
   else
     sudocheck
     $SUDOBIN $SHBIN -c "echo '# Jepsen test cluster Vagrant virtual machines
-10.1.42.42 n0.local n0
-10.1.42.10 n1.local n1
-10.1.42.20 n2.local n2
-10.1.42.30 n3.local n3
-10.1.42.40 n4.local n4
-10.1.42.50 n5.local n5
+192.168.122.10 n0.local n0
+192.168.122.11 n1.local n1
+192.168.122.12 n2.local n2
+192.168.122.13 n3.local n3
+192.168.122.14 n4.local n4
+192.168.122.15 n5.local n5
 ' >> /etc/hosts"
     logmsg notice "Jepsen test cluster nodes information added to /etc/hosts"
   fi

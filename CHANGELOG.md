@@ -26,3 +26,13 @@
 ## v1.1.1
 
 - Update documentation re: still a work in progress
+
+## v1.1.2
+
+- Use Java 7 JDK
+- Update sshd_config key exchange algorithms and MACs for Algorithm error
+  after change to Java 7
+- Better way to (conditionally) handle the generation of duplicate host
+  keys which happens with Vagrant based boxes
+- Update IP address range throughout
+- Shake fist at Auth fail
