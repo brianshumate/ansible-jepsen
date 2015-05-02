@@ -66,3 +66,10 @@
 - Add SSH config to all nodes
 - Add SSH key to all nodes
 - Update documentation
+
+## v1.1.8
+
+- Fix YAML syntax error in SSH config task
+- Explicit sudo on all tasks
+- Rearrange tasks
+- Tested process from scratch

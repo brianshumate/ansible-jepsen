@@ -4,21 +4,21 @@
 
 
 - hosts: all_nodes
-  sudo: True
   gather_facts: False
   vars_files:
     - ../defaults/main.yml
   tasks:
 
   - name: Create cluster grouping
+    sudo: False
     group_by: key={{ node_role }}
 
-    - name: Add SSH config
-      copy: "src=../files/dot_ssh_config dest={{ jepsen_user_home }}/.ssh/config owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
+  - name: Add SSH config
+    sudo: False
+    copy: "src=../files/dot_ssh_config dest={{ jepsen_user_home }}/.ssh/config owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
 
 
 - hosts: control_node
-  sudo: True
   roles:
     - brianshumate.jepsen
   gather_facts: False
@@ -28,12 +28,15 @@
   tasks:
 
     - name: Add contrib repo
+      sudo: True
       lineinfile: dest=/etc/apt/sources.list line='deb http://http.debian.net/debian/ jessie main contrib'
 
     - name: Update package cache
+      sudo: True
       apt: update_cache=yes
 
     - name: Install OS packages
+      sudo: True
       apt: "name={{ item }} update_cache=yes force=yes"
       with_items: jepsen_test_node_os_packages
 
@@ -41,13 +44,15 @@
       copy: "src=../files/{{ jepsen_java_tarball }} dest=/tmp/{{ jepsen_java_tarball }} owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
 
     - name: Answer the questions!
-      copy: src=../files/y.txt dest=/tmp/y.txt owner=root group=root mode=644
+      sudo: False
+      copy: src=../files/y.txt dest=/tmp/y.txt
 
     - name: Create Java package
       sudo: False
       shell: "make-jpkg /tmp/{{ jepsen_java_tarball }} < y.txt chdir=/tmp"
 
     - name: Install Java package
+      sudo: True
       apt: "deb=/tmp/{{ jepsen_java_package }}"
 
     - name: Generate SSH key
@@ -59,14 +64,15 @@
       file: "path={{ jepsen_user_home }}/.ssh/id_rsa state=file"
 
     - name: Remove last local data dir
-      local_action: file name=data state=absent
       sudo: False
+      local_action: file name=data state=absent
 
     - name: Create the local data dir
-      local_action: file name=data state=directory
       sudo: False
+      local_action: file name=data state=directory
 
     - name: Store SSH public key
+      sudo: False
       fetch: "src={{ jepsen_user_home }}/.ssh/id_rsa.pub dest=data/id_rsa.pub flat=yes"
 
     - name: Clone Jepsen repository
@@ -82,14 +88,19 @@
       get_url: "url={{ jepsen_lein_script_url }} dest={{ jepsen_user_home }}/bin/lein sha256sum={{ jepsen_lein_script_shasum }}"
 
     - name: Set lein executable
+      sudo: False
       file: "path={{ jepsen_user_home }}/bin/lein owner={{ jepsen_user }} group={{ jepsen_group }} mode=0755"
 
     - name: Host key script
+      sudo: False
       copy: src=../files/ssh_host_keys.sh dest={{ jepsen_user_home }}/bin/ssh_host_keys.sh owner={{ jepsen_user }} group={{ jepsen_group }} mode=755
+
+    - name: Insert host keys
+      sudo: False
+      shell: "{{ jepsen_user_home }}/bin/ssh_host_keys.sh"
 
 
 - hosts: all_nodes
-  sudo: True
   gather_facts: False
   vars_files:
     - ../defaults/main.yml
@@ -101,7 +112,6 @@
 
 
 - hosts: test_node
-  sudo: False
   roles:
     - brianshumate.jepsen
   gather_facts: False
@@ -118,6 +128,3 @@
       sudo: True
       lineinfile: dest=/etc/ssh/sshd_config regexp='^PermitRootLogin without-password' line='PermitRootLogin yes'
       notify: Restart sshd
-
-    - name: Insert host keys
-      shell: "{{ jepsen_user_home }}/bin/ssh_host_keys.sh"
