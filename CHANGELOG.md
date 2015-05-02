@@ -50,3 +50,7 @@
 - Update hosts inventory
 - Update Ansible Galaxy meta
 - Update documentation
+
+## v1.1.5
+
+- Open categories for Galaxy (YAML, how does it work?)
