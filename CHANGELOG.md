@@ -36,3 +36,10 @@
   keys which happens with Vagrant based boxes
 - Update IP address range throughout
 - Shake fist at Auth fail
+
+## v1.1.3
+
+- Back to Java 8 JDK
+- Refactor jepsen_init playbook
+- Removed unnecessary 'jepsen_makejpkg_script' variable
+- Updated documentation

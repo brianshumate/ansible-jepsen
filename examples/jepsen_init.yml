@@ -12,13 +12,7 @@
   - name: Create cluster grouping
     group_by: key={{ node_role }}
 
-  - name: Configure root user
-    user: "name=root password=$6$rounds=100000$kVLpW6dFOLVB3fJW$FzQXsIxXYkljCjTsPOyKJPFeUVHIQU7sFcnxbuPjWQ76EiBhRSEB4EFO2yeU.mTyUJNa17HUvnpZKdplBB0YY. update_password=always"
-
-  - name: Add SSH config
-    copy: "src=../files/dot_ssh_config dest={{ jepsen_user_home }}/.ssh/config owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
-
-- hosts: console_node
+- hosts: control_node
   sudo: True
   roles:
     - brianshumate.jepsen
@@ -27,6 +21,9 @@
     - ../defaults/main.yml
 
   tasks:
+
+    - name: Add SSH config
+      copy: "src=../files/dot_ssh_config dest={{ jepsen_user_home }}/.ssh/config owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
 
     - name: Add contrib repo
       lineinfile: dest=/etc/apt/sources.list line='deb http://http.debian.net/debian/ jessie main contrib'
@@ -85,6 +82,9 @@
     - name: Set lein executable
       file: "path={{ jepsen_user_home }}/bin/lein owner={{ jepsen_user }} group={{ jepsen_group }} mode=0755"
 
+    - name: Host key script
+      copy: src=../files/ssh_host_keys.sh dest={{ jepsen_user_home }}/bin/ssh_host_keys.sh owner={{ jepsen_user }} group={{ jepsen_group }} mode=755
+
 - hosts: test_node
   sudo: False
   roles:
@@ -95,49 +95,18 @@
 
   tasks:
 
+    - name: Configure root user
+      sudo: True
+      user: "name=root password=$6$rounds=100000$kVLpW6dFOLVB3fJW$FzQXsIxXYkljCjTsPOyKJPFeUVHIQU7sFcnxbuPjWQ76EiBhRSEB4EFO2yeU.mTyUJNa17HUvnpZKdplBB0YY. update_password=always"
+
+    - name: SSH PermitRootLogin
+      sudo: True
+      lineinfile: dest=/etc/ssh/sshd_config regexp='^PermitRootLogin without-password' line='PermitRootLogin yes'
+      notify: Restart sshd
+
     - name: Install SSH key
       sudo: True
       authorized_key: user=root key="{{ lookup('file', 'data/id_rsa.pub') }}"
-
-- hosts: all_nodes
-  roles:
-    - brianshumate.jepsen
-  gather_facts: True
-  vars_files:
-    - ../defaults/main.yml
-  tasks:
-
-    - name: Remove Vagrant duplicate host keys
-      sudo: True
-      shell: "/bin/rm -v /etc/ssh/ssh_host_*"
-      when: ansible_bios_version == "VirtualBox"
-
-    - name: Reconfigure SSH
-      sudo: True
-      shell: "dpkg-reconfigure openssh-server"
-      when: ansible_bios_version == "VirtualBox"
-
-    - name: Update sshd_config KexAlgorithms
-      sudo: True
-      lineinfile: "dest=/etc/ssh/sshd_config line='KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1,diffie-hellman-group1-sha1'"
-
-    - name: Update sshd_config MACs
-      sudo: True
-      lineinfile: "dest=/etc/ssh/sshd_config line='MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com,hmac-md5,hmac-sha1,hmac-sha1-96,hmac-md5-96'"
-      notify: Restart sshd
-
-- hosts: console_node
-  sudo: False
-  roles:
-    - brianshumate.jepsen
-  gather_facts: False
-  vars_files:
-    - ../defaults/main.yml
-
-  tasks:
-
-    - name: Host key script
-      copy: src=../files/ssh_host_keys.sh dest={{ jepsen_user_home }}/bin/ssh_host_keys.sh owner={{ jepsen_user }} group={{ jepsen_group }} mode=755
 
     - name: Insert host keys
       shell: "{{ jepsen_user_home }}/bin/ssh_host_keys.sh"
