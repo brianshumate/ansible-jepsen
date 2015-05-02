@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     n0_config.vm.hostname = "n0.local"
     n0_config.ssh.forward_agent = true
     n0_config.vm.provider "virtualbox" do |v|
-      v.name = "jepsen-test-console"
+      v.name = "jepsen-test-controller"
       v.customize ["modifyvm", :id, "--memory", BOX_MEM]
       v.customize ["modifyvm", :id, "--ioapic", "on"]
       v.customize ["modifyvm", :id, "--cpus", "2"]
@@ -149,7 +149,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Extra Ansible variables can be defined here
       # (equivalent to ansible-playbook '--extra-vars' command line option)
       #ansible.extra_vars = {
-      #  jepsen_node_ram: 1024,
+      #  jepsen_node_ram: 2048,
       #}
       ansible.playbook = "jepsen_init.yml"
       ansible.limit = "all"

@@ -50,7 +50,7 @@ For example in `defaults/main.yml`:
 jepsen_java_tarball: jdk-8u45-linux-x64.tar.gz
 ```
 
-and the contents of `files/`:
+and the contents of `files`:
 
 ```
 ls -1 files
@@ -76,11 +76,16 @@ The default variables for this project in `defaults/main.yml` are as follows:
 
 None
 
-## Example Playbook
+## Examples
 
-An example playbook, `jespsen_init.yml` is available in the `examples`
-directory and can be executed like this:
+What you'll find in the `examples` directory:
 
+* `debian` The default hosts inventory file
+* `jepsen_init.yml` example playbook containing all tasks
+* `Vagrantfile` example Vagrantfile for 6 1GB RAM nodes; 1 controller, 5 test
+
+The example playbook, `jespsen_init.yml` can be executed like this against
+any 6 arbitrary hosts running Debian 8:
 
 ```
 ansible-playbook -i $HOSTS jepsen_init.yml
@@ -140,7 +145,9 @@ as listed in the `jepsen` project directory:
 * elasticsearch
 * mongodb
 
-"Help, I'm using VirtualBox, getting SSH timeouts, and the playbook fails!"
+### A Wee Spot of Ramshackle Troubleshooting
+
+**"Help, I'm using VirtualBox, seeing SSH timeouts, and the playbook fails!"**
 
 Re-run the playbook based on Ansible's `--limit` suggestion while shaking
 your fist at VirtualBox and adjusting the onion on your belt. For example:
@@ -148,6 +155,23 @@ your fist at VirtualBox and adjusting the onion on your belt. For example:
 ```
 ansible-playbook -i debian --limit @$HOME/jepsen_init.retry jepsen_init.yml
 ```
+
+**Help, I ran `lein test` and got this error: `com.jcraft.jsch.JSchException: reject HostKey: n1`**
+
+Probably your test node host keys are not in `known_hosts` on the controller
+node even though that should have been done for you by the playbook; run
+`~/bin/ssh_host_keys.sh` to manually add them.
+
+**Owie, I ran `lein test` and got this error: Could not find artifact some_clojure_jar_from_clojars in clojars (https://clojars.org/repo/)
+This could be due to a typo in :dependencies or network issues.
+If you are behind a proxy, try setting the 'http_proxy' environment variable.
+Tests failed.**
+
+This can happen on overwhelmed VirtualBoxes with constrained resources, such
+as when running this project on a little MacBook Pro with only 8GB of RAM.
+Run `lein test` again to finish downloading the dependencies and think of an
+excuse to get a speedier machine with 16GB of RAM and pray to the VirtualBox
+globs. Or, run this project on some decent virtual machines. ;)
 
 ## License
 

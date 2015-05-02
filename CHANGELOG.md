@@ -54,3 +54,9 @@
 ## v1.1.5
 
 - Open categories for Galaxy (YAML, how does it work?)
+
+## v1.1.6
+
+- Reorder some tasks
+- Rename console to control in Vagrantfile
+- Updated documentation with more details about the examples
