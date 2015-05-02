@@ -18,7 +18,7 @@ jepsen_test_node_os_packages:
   - libxtst6
   - libxxf86vm1
 
-jepsen_java_binary: jdk-8u45-linux-x64.tar.gz
+jepsen_java_tarball: jdk-8u45-linux-x64.tar.gz
 
 jepsen_java_package: oracle-java8-jdk_8u45_amd64.deb
 

@@ -43,3 +43,10 @@
 - Refactor jepsen_init playbook
 - Removed unnecessary 'jepsen_makejpkg_script' variable
 - Updated documentation
+
+## v1.1.4
+
+- Additional mad props
+- Update hosts inventory
+- Update Ansible Galaxy meta
+- Update documentation

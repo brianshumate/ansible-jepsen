@@ -36,14 +36,14 @@
       with_items: jepsen_test_node_os_packages
 
     - name: Copy Java binary
-      copy: "src=../files/{{ jepsen_java_binary }} dest=/tmp/{{ jepsen_java_binary }} owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
+      copy: "src=../files/{{ jepsen_java_tarball }} dest=/tmp/{{ jepsen_java_tarball }} owner={{ jepsen_user }} group={{ jepsen_group }} mode=644"
 
     - name: Answer the questions!
       copy: src=../files/y.txt dest=/tmp/y.txt owner=root group=root mode=644
 
     - name: Create Java package
       sudo: False
-      shell: "make-jpkg /tmp/{{ jepsen_java_binary }} < y.txt chdir=/tmp"
+      shell: "make-jpkg /tmp/{{ jepsen_java_tarball }} < y.txt chdir=/tmp"
 
     - name: Install Java package
       apt: "deb=/tmp/{{ jepsen_java_package }}"

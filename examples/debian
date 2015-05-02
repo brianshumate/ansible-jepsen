@@ -1,9 +1,9 @@
 # File: debian
-# Jepsen test cluster node configuration for Vagrant / VirtualBox Debian hosts
-#
+# Jepsen test cluster hosts inventory for Vagrant / VirtualBox Debian hosts
+
 # NB: Replace the hosts below with your preferred node hostnames and continue
-#     the 'nodeN' pattern for cluster nodes past 'n5'
-#     Do not modify the labels (text appearing between []), however
+#     the 'nN' pattern for cluster nodes past 'n5'
+#     Do not modify the label (text appearing between []), however
 
 [all_nodes]
 n0.local node_role=control_node ansible_ssh_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/n0/virtualbox/private_key
