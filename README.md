@@ -72,7 +72,7 @@ The default variables for this project in `defaults/main.yml` are as follows:
 | jepsen_lein_script_url | https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein | URL to the Leiningen script |
 |jepsen_lein_script_shasum | sha 256 summary | The SHA 256 summary for Leiningen script |
 
-## Dependencies
+## Role Dependencies
 
 None
 
@@ -119,18 +119,18 @@ Install the playbook:
 ansible-galaxy install brianshumate.jepsen
 ```
 
-Then copy your Java tarball to `$ROLESPATH/files` directory as described in
+Then, copy your Java tarball to `$ROLESPATH/files` directory as described in
 the **Requirements** section; don't forget to update the `jepsen_java_tarball`
 and `jepsen_java_package` variables in `defaults/main.yml` as well.
 
-Fire up Vagrant and kickoff the playbook:
+Fire up Vagrant and kick off the playbook:
 
 ```
 cd $ROLESPATH/examples
 vagrant up
 ```
 
-Login to the control node and try a Jespsen test:
+SSH into the control node and try a Jespsen test:
 
 ```
 vagrant ssh n0
@@ -138,8 +138,8 @@ cd jepsen/$DATABASE
 lein test
 ```
 
-Pick your poison; substitute `$DATABASE` for one to run Jepsen against
-as listed in the `jepsen` project directory:
+Pick your poison; substitute `$DATABASE` in the above example for one to run
+Jepsen against as listed in the `jepsen` project directory:
 
 * aerospike
 * elasticsearch
@@ -149,8 +149,9 @@ as listed in the `jepsen` project directory:
 
 **"Help, I'm using VirtualBox, seeing SSH timeouts, and the playbook fails!"**
 
-Re-run the playbook based on Ansible's `--limit` suggestion while shaking
-your fist at VirtualBox and adjusting the onion on your belt. For example:
+Re-run the playbook based on Ansible's `--limit` suggestion in the error
+output while shaking your fist at VirtualBox and adjusting the onion
+on your belt. For example:
 
 ```
 ansible-playbook -i debian --limit @$HOME/jepsen_init.retry jepsen_init.yml
@@ -160,7 +161,7 @@ ansible-playbook -i debian --limit @$HOME/jepsen_init.retry jepsen_init.yml
 
 Probably your test node host keys are not in `known_hosts` on the controller
 node even though that should have been done for you by the playbook; run
-`~/bin/ssh_host_keys.sh` to manually add them.
+`~/bin/ssh_host_keys.sh` on the controller node to manually add them.
 
 **Owie, I ran `lein test` and got this error: Could not find artifact some_clojure_jar_from_clojars in clojars (https://clojars.org/repo/)
 This could be due to a typo in :dependencies or network issues.
@@ -169,9 +170,10 @@ Tests failed.**
 
 This can happen on overwhelmed VirtualBoxes with constrained resources, such
 as when running this project on a little MacBook Pro with only 8GB of RAM.
+
 Run `lein test` again to finish downloading the dependencies and think of an
 excuse to get a speedier machine with 16GB of RAM and pray to the VirtualBox
-globs. Or, run this project on some decent virtual machines. ;)
+globs or run this project on some decent virtual machines. ;)
 
 ## License
 

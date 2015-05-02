@@ -60,3 +60,9 @@
 - Reorder some tasks
 - Rename console to control in Vagrantfile
 - Updated documentation with more details about the examples
+
+## v1.1.7
+
+- Add SSH config to all nodes
+- Add SSH key to all nodes
+- Update documentation
