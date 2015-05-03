@@ -107,6 +107,9 @@ this role:
 192.168.122.10 n5.local n5
 ```
 
+There is an included convenience script, `bin/preinstall.sh` which will
+add the hosts and install the vagran-hosts plugin for you.
+
 Define your Ansible roles path (for convenience in following steps):
 
 ```
@@ -122,6 +125,13 @@ ansible-galaxy install brianshumate.jepsen
 Then, copy your Java tarball to `$ROLESPATH/files` directory as described in
 the **Requirements** section; don't forget to update the `jepsen_java_tarball`
 and `jepsen_java_package` variables in `defaults/main.yml` as well.
+
+If you did not use `bin/preinstall.sh`, ensure that you have installed the
+vagrant-hosts plugin:
+
+```
+vagrant plugin install vagrant-hosts
+```
 
 Fire up Vagrant and kick off the playbook:
 

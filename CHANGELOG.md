@@ -73,3 +73,10 @@
 - Explicit sudo on all tasks
 - Rearrange tasks
 - Tested process from scratch
+
+## v1.1.9
+
+- Rename bin/preinstall script
+- Update bin/preinstall.sh script
+- Test bin/preinstall.sh script
+- Update documentation

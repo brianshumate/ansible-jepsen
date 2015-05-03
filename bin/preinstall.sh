@@ -3,7 +3,6 @@
 # File: examples/bin/preinstall - convenience script to add Jepsen test
 # cluster VM node host information to /etc/hosts for Vagrant/VirtualBox
 
-CHMODBIN="/bin/chmod"
 GREPBIN="/usr/bin/grep"
 STARTIP="192.168.122.10"
 SUDOBIN="/usr/bin/sudo"
