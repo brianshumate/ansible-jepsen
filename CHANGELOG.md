@@ -80,3 +80,7 @@
 - Update bin/preinstall.sh script
 - Test bin/preinstall.sh script
 - Update documentation
+
+## v1.1.10
+
+- Updated documentation

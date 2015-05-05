@@ -100,17 +100,17 @@ this role:
 
 ```
 192.168.122.10 n0.local n0
-192.168.122.10 n1.local n1
-192.168.122.10 n2.local n2
-192.168.122.10 n3.local n3
-192.168.122.10 n4.local n4
-192.168.122.10 n5.local n5
+192.168.122.11 n1.local n1
+192.168.122.12 n2.local n2
+192.168.122.13 n3.local n3
+192.168.122.14 n4.local n4
+192.168.122.15 n5.local n5
 ```
 
 There is an included convenience script, `bin/preinstall.sh` which will
-add the hosts and install the vagran-hosts plugin for you.
+add the hosts and install the vagrant-hosts plugin for you.
 
-Define your Ansible roles path (for convenience in following steps):
+Define your Ansible roles path (for convenience in the following steps):
 
 ```
 export ROLESPATH=FULL_PATH_TO_ANSIBLE_ROLES
