@@ -3,11 +3,7 @@
 # File: examples/bin/preinstall - convenience script to add Jepsen test
 # cluster VM node host information to /etc/hosts for Vagrant/VirtualBox
 
-GREPBIN="/usr/bin/grep"
-STARTIP="192.168.122.10"
-SUDOBIN="/usr/bin/sudo"
-SHBIN="/bin/sh"
-VAGRANTBIN="/usr/bin/vagrant"
+startip="192.168.122.10"
 
 # Log stuff
 function logmsg {
@@ -26,18 +22,17 @@ function logmsg {
 # Check if sudo will need password
 function sudocheck {
   logmsg info "Enter your user account password for sudo if prompted."
-  $SUDOBIN true
+  sudo true
 }
 
 # Add hosts entries if necessary
 function add_hosts {
-  #FIXME: this doesn't work as expected
   if grep -Fq "192.168.122.12" /etc/hosts
   then
     logmsg notice "Jepsen test cluster VM node information present in /etc/hosts"
   else
     sudocheck
-    $SUDOBIN $SHBIN -c "echo '# Jepsen test cluster Vagrant virtual machines
+    sudo sh -c "echo '# Jepsen test cluster Vagrant virtual machines
 192.168.122.10 n0.local n0
 192.168.122.11 n1.local n1
 192.168.122.12 n2.local n2
@@ -51,10 +46,10 @@ function add_hosts {
 
 # Install Vagrant Hosts plugin if necessary
 function vagrant_hosts_plugin {
-  if $VAGRANTBIN plugin list | $GREPBIN vagrant-hosts > /dev/null 2>&1; then
+  if vagrant plugin list | grep vagrant-hosts > /dev/null 2>&1; then
     logmsg notice "Vagrant Hosts plugin is installed"
   else
-    $VAGRANTBIN plugin install vagrant-hosts > /dev/null 2>&1
+    vagrant plugin install vagrant-hosts > /dev/null 2>&1
     logmsg notice "Installed Vagrant Hosts plugin"
   fi
 }

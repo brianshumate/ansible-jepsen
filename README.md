@@ -41,7 +41,9 @@ is all about:
 
 This role is dependent on the Oracle Java JDK; you will need to manually
 download the JDK package and specify its file name as the
-`jepsen_java_tarball` variable in `defaults/main.yml`,then place the actual
+`jepsen_java_tarball` variable in `defaults/main.yml`.
+
+Then, place the actual
 tarball into the `files` subdirectory of this role.
 
 For example in `defaults/main.yml`:
@@ -50,7 +52,7 @@ For example in `defaults/main.yml`:
 jepsen_java_tarball: jdk-8u45-linux-x64.tar.gz
 ```
 
-and the contents of `files`:
+and the contents of the `files` directory:
 
 ```
 ls -1 files
@@ -70,7 +72,7 @@ The default variables for this project in `defaults/main.yml` are as follows:
 | jepsen_java_tarball | jdk-8u45-linux-x64.tar.gz | Filename for the Oracle Java binary tarball |
 | jepsen_java_package | oracle-j2sdk1.8_1.8.0+update45_amd64.deb | Filename for Debian package created from jepsen_java_tarball |
 | jepsen_lein_script_url | https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein | URL to the Leiningen script |
-|jepsen_lein_script_shasum | sha 256 summary | The SHA 256 summary for Leiningen script |
+|jepsen_lein_script_shasum | SHA 256 summary | The SHA 256 summary for Leiningen script |
 
 ## Role Dependencies
 
@@ -80,9 +82,14 @@ None
 
 What you'll find in the `examples` directory:
 
+* `Vagrantfile` example Vagrantfile for 6 1GB RAM nodes; with
+  1 controller node and 5 test nodes
+* `bin` directory
+ * `preinstall` convenience script to add hosts entries to `/etc/hosts`
+   and install the `vagrant-hosts` plugin  
 * `debian` The default hosts inventory file
-* `jepsen_init.yml` example playbook containing all tasks
-* `Vagrantfile` example Vagrantfile for 6 1GB RAM nodes; 1 controller, 5 test
+* `jepsen_init.yml` example playbook containing all Jepsen related tasks
+
 
 The example playbook, `jespsen_init.yml` can be executed like this against
 any 6 arbitrary hosts running Debian 8:
@@ -157,7 +164,7 @@ Jepsen against as listed in the `jepsen` project directory:
 
 ### A Wee Spot of Ramshackle Troubleshooting
 
-**"Help, I'm using VirtualBox, seeing SSH timeouts, and the playbook fails!"**
+#### "Help, I'm using VirtualBox, seeing SSH timeouts, and the playbook fails!"
 
 Re-run the playbook based on Ansible's `--limit` suggestion in the error
 output while shaking your fist at VirtualBox and adjusting the onion
@@ -167,13 +174,14 @@ on your belt. For example:
 ansible-playbook -i debian --limit @$HOME/jepsen_init.retry jepsen_init.yml
 ```
 
-**Help, I ran `lein test` and got this error: `com.jcraft.jsch.JSchException: reject HostKey: n1`**
+#### Help, I ran `lein test` and got this error: `com.jcraft.jsch.JSchException: reject HostKey: n1`
 
 Probably your test node host keys are not in `known_hosts` on the controller
 node even though that should have been done for you by the playbook; run
 `~/bin/ssh_host_keys.sh` on the controller node to manually add them.
 
-**Owie, I ran `lein test` and got this error: Could not find artifact some_clojure_jar_from_clojars in clojars (https://clojars.org/repo/)
+#### Ouch, I ran `lein test` and got this error: Could not find artifact some_clojure_jar_from_clojars in clojars (https://clojars.org/repo/)
+
 This could be due to a typo in :dependencies or network issues.
 If you are behind a proxy, try setting the 'http_proxy' environment variable.
 Tests failed.**
