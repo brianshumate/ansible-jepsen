@@ -88,3 +88,7 @@
 ## v1.1.11
 
 - Cleaned up preinstall script to be less brittle/overly-explicit/non-portable
+
+## v 1.1.12
+
+- Updated documentation

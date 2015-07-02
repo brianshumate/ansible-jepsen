@@ -86,7 +86,7 @@ What you'll find in the `examples` directory:
   1 controller node and 5 test nodes
 * `bin` directory
  * `preinstall` convenience script to add hosts entries to `/etc/hosts`
-   and install the `vagrant-hosts` plugin  
+   and install the `vagrant-hosts` plugin
 * `debian` The default hosts inventory file
 * `jepsen_init.yml` example playbook containing all Jepsen related tasks
 
@@ -180,11 +180,7 @@ Probably your test node host keys are not in `known_hosts` on the controller
 node even though that should have been done for you by the playbook; run
 `~/bin/ssh_host_keys.sh` on the controller node to manually add them.
 
-#### Ouch, I ran `lein test` and got this error: Could not find artifact some_clojure_jar_from_clojars in clojars (https://clojars.org/repo/)
-
-This could be due to a typo in :dependencies or network issues.
-If you are behind a proxy, try setting the 'http_proxy' environment variable.
-Tests failed.**
+#### Ouch, I ran `lein test` and got this error: Could not find artifact some_clojure_jar_from_clojars in clojars (https://clojars.org/repo/) This could be due to a typo in :dependencies or network issues. If you are behind a proxy, try setting the 'http_proxy' environment variable. Tests failed.**
 
 This can happen on overwhelmed VirtualBoxes with constrained resources, such
 as when running this project on a little MacBook Pro with only 8GB of RAM.
@@ -192,6 +188,9 @@ as when running this project on a little MacBook Pro with only 8GB of RAM.
 Run `lein test` again to finish downloading the dependencies and think of an
 excuse to get a speedier machine with 16GB of RAM and pray to the VirtualBox
 globs or run this project on some decent virtual machines. ;)
+
+**NOTE**: If the test fails on the same JAR each time, then it could be
+possible that the JAR actually has not yet been pushed to Clojars.
 
 ## License
 
